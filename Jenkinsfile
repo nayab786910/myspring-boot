@@ -1,7 +1,7 @@
 pipeline{
   agent {label 'login_page'}
       environment {
-        registry = "519852036875.dkr.ecr.us-east-1.amazonaws.com/my-first-ecr"
+        registry = "519852036875.dkr.ecr.us-east-2.amazonaws.com/cloudjournee:latest"
     }
     stages{
         stage('CHECKOUT GIT'){
