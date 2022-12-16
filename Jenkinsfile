@@ -1,6 +1,5 @@
 pipeline{
   agent {label 'login_page'}
-    tools {maven "MAVEN"}
     stages{
         stage('CHECKOUT GIT'){
             steps{
