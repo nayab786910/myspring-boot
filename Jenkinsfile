@@ -2,12 +2,12 @@ pipeline{
   agent {label 'login_page'}
     tools {maven "MAVEN"}
     stages{
-        stage('code checkout from GitHub'){
+        stage('CHECKOUT GIT'){
             steps{
-                git branch: 'master', url: ''
+                git branch: 'master', url: 'https://github.com/nayab786910/myspring-boot.git'
             }
         }
-        stage('Code Quality Check via SonarQube'){
+        stage('CODE QUALITY'){
             steps{
                 script{
                     def scannerHome = tool 'sonarqube-scanner';
