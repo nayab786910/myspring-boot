@@ -1,5 +1,8 @@
 pipeline{
   agent {label 'login_page'}
+      environment {
+        registry = "519852036875.dkr.ecr.us-east-1.amazonaws.com/my-first-ecr"
+    }
     stages{
         stage('CHECKOUT GIT'){
             steps{
@@ -17,7 +20,13 @@ pipeline{
                 }
             }
         }
-       stage('Build Image') 
+        stage('BUILDING ARTIFACT'){
+     			 steps{
+        			  echo 'build '
+                sh "mvn clean package"
+     			  }
+        }
+        stage('DOCKER IMAGE') 
        {
           agent { label 'login_page'}
           steps{
