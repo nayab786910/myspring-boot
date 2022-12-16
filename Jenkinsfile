@@ -21,7 +21,7 @@ pipeline{
             }
         }
         stage('BUILDING ARTIFACT'){
-          agent { label 'login_page_1'}
+          agent { label 'login_page'}
      			 steps{
         			  echo 'build '
                 sh "mvn clean package"
@@ -29,13 +29,23 @@ pipeline{
         }
         stage('DOCKER IMAGE') 
        {
-          agent { label 'login_page_1'}
+          agent { label 'login_page'}
           steps{
               script {
                 myImage = docker.build registry
               }
            }
         }
+      stage('Pushing to ECR') {
+         agent { label 'login_page'}
+         steps{  
+         script {
+                sh 'aws ecr get-login-password --region us-east-2 | docker login --username AWS --password-stdin 519852036875.dkr.ecr.us-east-2.amazonaws.com'
+                sh 'docker push 519852036875.dkr.ecr.us-east-2.amazonaws.com/cloudjournee:latest'
+                }
+          }
+      }
+
 
     }
 }
