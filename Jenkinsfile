@@ -4,7 +4,7 @@ pipeline{
     stages{
         stage('CHECKOUT GIT'){
             steps{
-                git branch: 'master', url: 'https://github.com/nayab786910/myspring-boot.git'
+                git branch: 'maIN', url: 'https://github.com/nayab786910/myspring-boot.git'
             }
         }
         stage('CODE QUALITY'){
