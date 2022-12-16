@@ -10,7 +10,7 @@ pipeline{
             steps{
                 script{
                     def scannerHome = tool 'sonarqube-scanner';
-                    withSonarQubeEnv(credentialsId: 'sonarqube_access_token'){
+                    withSonarQubeEnv('sonarqube_cred'){
                         if(fileExists("sonar-project.properties")) {
                          sh "${tool("sonarqube-scanner")}/bin/sonar-scanner"
                          }
