@@ -17,5 +17,15 @@ pipeline{
                 }
             }
         }
+       stage('Build Image') 
+       {
+          agent { label 'login_page'}
+          steps{
+              script {
+                myImage = docker.build registry
+              }
+           }
+        }
+
     }
 }
