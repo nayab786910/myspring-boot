@@ -21,6 +21,7 @@ pipeline{
             }
         }
         stage('BUILDING ARTIFACT'){
+          agent { label 'login_page_1'}
      			 steps{
         			  echo 'build '
                 sh "mvn clean package"
@@ -28,7 +29,7 @@ pipeline{
         }
         stage('DOCKER IMAGE') 
        {
-          agent { label 'login_page'}
+          agent { label 'login_page_1'}
           steps{
               script {
                 myImage = docker.build registry
