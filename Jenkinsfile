@@ -56,13 +56,11 @@ pipeline{
           agent { label 'login_page'}
           steps { 
             kubernetesDeploy(
+                    configs: 'springboot.yaml',
                     kubeconfigId: 'k8s',
                     enableConfigSubstitution: true
                     )
-            script {
-            sh 'cat springboot.yaml'
-            sh 'kubectl apply -f springboot.yaml'
-            }
+
            }  
        }
   }
