@@ -7,7 +7,7 @@ pipeline{
         stage('CHECKOUT GIT'){
             steps{
                 step([$class: 'WsCleanup'])
-                git branch: 'main', url: 'https://github.com/nayab786910/myspring-boot.git'
+                git branch: 'master', url: 'https://github.com/nayab786910/myspring-boot.git'
             }
         }
         stage('CODE QUALITY'){
