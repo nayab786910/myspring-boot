@@ -1,5 +1,5 @@
 pipeline{
-  agent {label 'login_page_1'}
+  agent {label 'login_page'}
       environment {
         IMAGE_TAG = "${env.BUILD_NUMBER}"
         registry = "519852036875.dkr.ecr.us-east-2.amazonaws.com/cloudjournee:${env.BUILD_NUMBER}"
@@ -13,7 +13,7 @@ pipeline{
             }
         }
         stage('CODE QUALITY'){
-          agent {label 'login_page_1'}
+          agent {label 'login_page'}
             steps{
                 script{
                     withSonarQubeEnv('sonarqube_cred'){
