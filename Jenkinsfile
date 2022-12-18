@@ -44,7 +44,7 @@ pipeline{
           steps{  
           script {
                  sh 'aws ecr get-login-password --region us-east-2 | docker login --username AWS --password-stdin 519852036875.dkr.ecr.us-east-2.amazonaws.com'
-                 sh 'docker push ${registry1}'
+                 sh 'docker push ${registry}'
                  sh 'ls -al'
                  sh "sed -i 's|image: .*|image: ${registry}|' ./springboot.yaml"
                  sh 'cat ./springboot.yaml'
