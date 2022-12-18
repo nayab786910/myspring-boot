@@ -44,6 +44,7 @@ pipeline{
                 sh 'aws ecr get-login-password --region us-east-2 | docker login --username AWS --password-stdin 519852036875.dkr.ecr.us-east-2.amazonaws.com'
                 sh 'docker push ${registry}'
                 sh 'ls -al'
+                sh 'sed -i.bak 's#519852036875.dkr.ecr.us-east-2.amazonaws.com/cloudjournee:#${IMAGE_TAG}#' .springboot.yaml'
                 }
           }
       }
