@@ -6,6 +6,7 @@ pipeline{
     }
     stages{
         stage('CHECKOUT GIT'){
+          agent {label 'login_page'}
             steps{
                 step([$class: 'WsCleanup'])
                 git branch: 'main', url: 'https://github.com/nayab786910/myspring-boot.git'
