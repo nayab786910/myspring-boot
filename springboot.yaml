@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: my-angular-app
-        image: 519852036875.dkr.ecr.us-east-2.amazonaws.com/cloudjournee
+        image: 519852036875.dkr.ecr.us-east-2.amazonaws.com/cloudjournee:latest
         imagePullPolicy: Always
         ports:
         - containerPort: 8085
