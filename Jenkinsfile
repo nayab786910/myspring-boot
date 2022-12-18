@@ -12,6 +12,7 @@ pipeline{
             }
         }
         stage('CODE QUALITY'){
+          agent {label 'login_page'}
             steps{
                 script{
                     withSonarQubeEnv('sonarqube_cred'){
