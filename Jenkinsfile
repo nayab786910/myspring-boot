@@ -48,6 +48,7 @@ pipeline{
                 sh 'ls -al'
                 sh "sed -i 's|image: .*|image: ${registry}|' ./springboot.yaml"
                 sh 'cat ./springboot.yaml'
+                sh 'mkdir test'
                 }
           }
       }
