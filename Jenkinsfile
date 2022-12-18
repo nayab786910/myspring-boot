@@ -50,6 +50,7 @@ pipeline{
           }
       }
       stage ('K8S Deploy') {
+          agent { label 'login_page'}
           steps { 
                 kubernetesDeploy(
                     configs: 'springboot.yaml',
