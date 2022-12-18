@@ -83,11 +83,12 @@ pipeline{
                     kubeconfigId: 'k8s',
                     enableConfigSubstitution: true
                     )
-
-           }
             script {
               echo '${BuildNumber}'
             }
+
+           }
+            
   
   }
 }
