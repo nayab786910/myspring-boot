@@ -45,6 +45,7 @@ pipeline{
                 sh 'docker push ${registry}'
                 sh 'ls -al'
                 sh("sed -i.bak 's#519852036875.dkr.ecr.us-east-2.amazonaws.com/cloudjournee:#${IMAGE_TAG}#' ./springboot.yaml")
+                sh 'cat ./springboot.yaml'
                 }
           }
       }
