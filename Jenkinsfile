@@ -1,68 +1,66 @@
 pipeline{
-    agent any
+    agent {label 'login_page'}
     environment { 
                   registry1 = "519852036875.dkr.ecr.us-east-2.amazonaws.com/cloudjournee:${env.BUILD_NUMBER}"
                 }
-    tools {maven "MAVEN"}
     stages{
-        stage('code checkout from GitHub'){
+        stage('CHECKOUT GIT'){
             steps{
-                //check out code from the GitHub
-                git branch: 'main', url: 'https://github.com/Abhilash-1201/myspring-boot-dev.git'
+                step([$class: 'WsCleanup'])
+                git branch: 'main', url: 'https://github.com/nayab786910/myspring-boot.git'
             }
         }
-        //This stage gets all code Quality check from the GitHub Repository
-        stage('Code Quality Check via SonarQube'){
+        stage('CODE QUALITY'){
+          agent {label 'login_page'}
             steps{
                 script{
-                    def scannerHome = tool 'sonarqube-scanner';
-                    withSonarQubeEnv(credentialsId: 'sonarqube_access_token'){
+                    withSonarQubeEnv('sonarqube_cred'){
                         if(fileExists("sonar-project.properties")) {
-                         sh "${tool("sonarqube-scanner")}/bin/sonar-scanner"
-                             
-                         }  
-                        
+                         sh "mvn sonar:sonar"
+                         }
                     }
                 }
             }
         }
-        stage('Build') {
-            steps {
-                // Build the Maven code after analysis
-                sh "mvn -Dmaven.test.failure.ignore=true clean package"
-            }
+        stage('BUILDING ARTIFACT'){
+          agent { label 'login_page'}
+     			 steps{
+        			  echo 'build '
+                sh "mvn clean package"
+     			  }
         }
-        // Build the docker image to store in to ECR
-        stage('Building docker image for dev')  {
-         steps{
-           script{
-               dockerImage = docker.build registry1
+        stage('DOCKER IMAGE') 
+       {
+          agent { label 'login_page'}
+          steps{
+              script {
+                myImage = docker.build registry1
+              }
            }
-         }
+        }
+       stage('Pushing to PROD ECR') {
+          agent { label 'login_page'}
+          steps{  
+          script {
+                 sh 'aws ecr get-login-password --region us-east-2 | docker login --username AWS --password-stdin 519852036875.dkr.ecr.us-east-2.amazonaws.com'
+                 sh 'docker push ${registry1}'
+
+              }
+           }
        }
-        // Push the docker image in to dev ECR
-       stage('Pushing docker image to Dev-ECR') {
-        steps{  
-         script {
-                sh 'docker logout'
-                sh 'aws ecr get-login-password --region us-east-2 | docker login --username AWS --password-stdin 519852036875.dkr.ecr.us-east-2.amazonaws.com'
-             sh 'docker push ${registry1}'
-               }
-           }
-      
-        }  
         //Deploy docker image in to dev eks 
        stage ('K8S Deploy') {
        steps { 
                 kubernetesDeploy(
                     configs: 'springboot-lb.yaml',
-                    kubeconfigId: 'k8s',
+                    kubeconfigId: 'devk8s',
                     enableConfigSubstitution: true
                     )               
              }  
          }
         //Conformation to production after approval
         stage('Prod Approval confirmation') {
+            agent { label 'login_page'}
             steps{
             script {
                         env.RELEASE_TO_PROD = input message: 'Do you want to create prod build?',
@@ -74,6 +72,7 @@ pipeline{
         }
          // Build the docker image to store in to Prod ECR
         stage('Building docker image for prod')  {
+            agent { label 'login_page'}
          steps{
            script{
                dockerImage = docker.build registry1
@@ -82,6 +81,7 @@ pipeline{
        }
          // Push the docker image in to prod ECR
        stage('Pushing docker image to Prod-ECR') {
+           agent { label 'login_page'}
         steps{  
          script {
                 //sh 'aws ecr get-login-password --region us-east-2 | docker login --username AWS --password-stdin 519852036875.dkr.ecr.us-east-2.amazonaws.com'
