@@ -5,14 +5,9 @@ pipeline{
         registry = "519852036875.dkr.ecr.us-east-2.amazonaws.com/cloudjournee:${env.BUILD_NUMBER}"
     }
     stages{
-        stage('Git') {
-            steps {
-                step([$class: 'WsCleanup'])
-                checkout scm
-            }
-        }
         stage('CHECKOUT GIT'){
             steps{
+                step([$class: 'WsCleanup'])
                 git branch: 'main', url: 'https://github.com/nayab786910/myspring-boot.git'
             }
         }
