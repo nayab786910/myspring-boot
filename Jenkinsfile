@@ -2,7 +2,8 @@ pipeline{
   agent {label 'login_page'}
       environment {
         IMAGE_TAG = "${env.BUILD_NUMBER}"
-        registry = "519852036875.dkr.ecr.us-east-2.amazonaws.com/cloudjournee:${env.BUILD_NUMBER}"
+        registry1 = "519852036875.dkr.ecr.us-east-2.amazonaws.com/demo_project:${env.BUILD_NUMBER}"
+        registry2 = "519852036875.dkr.ecr.us-east-2.amazonaws.com/cloudjournee:${env.BUILD_NUMBER}"
     }
     stages{
         stage('CHECKOUT GIT'){
@@ -35,33 +36,57 @@ pipeline{
           agent { label 'login_page'}
           steps{
               script {
-                myImage = docker.build registry
+                myImage = docker.build registry1
               }
            }
         }
-      stage('Pushing to ECR') {
-         agent { label 'login_page'}
-         steps{  
-         script {
-                sh 'aws ecr get-login-password --region us-east-2 | docker login --username AWS --password-stdin 519852036875.dkr.ecr.us-east-2.amazonaws.com'
-                sh 'docker push ${registry}'
-                sh 'ls -al'
-                sh "sed -i 's|image: .*|image: ${registry}|' ./springboot.yaml"
-                sh 'cat ./springboot.yaml'
-              
-                }
-          }
-      }
-      stage ('K8S Deploy') {
+       stage('Pushing to PROD ECR') {
           agent { label 'login_page'}
-          steps { 
-            kubernetesDeploy(
-                    configs: 'springboot.yaml',
-                    kubeconfigId: 'k8s',
-                    enableConfigSubstitution: true
-                    )
-
-           }  
+          steps{  
+          script {
+                 sh 'aws ecr get-login-password --region us-east-2 | docker login --username AWS --password-stdin 519852036875.dkr.ecr.us-east-2.amazonaws.com'
+                 sh 'docker push ${registry1}'
+                 sh 'ls -al'
+                 sh "sed -i 's|image: .*|image: ${registry1}|' ./springboot.yaml"
+                 sh 'cat ./springboot.yaml'
+              }
+           }
        }
+      stage ('K8S dev Deploy') {
+           agent { label 'login_page'}
+           steps { 
+             kubernetesDeploy(
+                     configs: 'springboot.yaml',
+                     kubeconfigId: 'devk8s',
+                     enableConfigSubstitution: true
+                     )
+
+            }  
+        }
+//       stage('Pushing to PROD ECR') {
+//          agent { label 'login_page'}
+//          steps{  
+//          script {
+//                 sh 'aws ecr get-login-password --region us-east-2 | docker login --username AWS --password-stdin 519852036875.dkr.ecr.us-east-2.amazonaws.com'
+//                 sh 'docker push ${registry}'
+//                 sh 'ls -al'
+//                 sh "sed -i 's|image: .*|image: ${registry}|' ./springboot.yaml"
+//                 sh 'cat ./springboot.yaml'
+              
+//                 }
+//           }
+//       }
+//       stage ('K8S dev Deploy') {
+//           agent { label 'login_page'}
+//           steps { 
+//             kubernetesDeploy(
+//                     configs: 'springboot.yaml',
+//                     kubeconfigId: 'k8s',
+//                     enableConfigSubstitution: true
+//                     )
+
+//            }  
+//        }
+  
   }
 }
