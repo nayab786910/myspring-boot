@@ -1,7 +1,8 @@
 pipeline{
   agent {label 'login_page'}
       environment {
-        registry = "519852036875.dkr.ecr.us-east-2.amazonaws.com/cloudjournee:latest"
+        IMAGE_TAG = "${env.BUILD_NUMBER}"
+        registry = "519852036875.dkr.ecr.us-east-2.amazonaws.com/cloudjournee:${env.BUILD_NUMBER}"
     }
     stages{
         stage('CHECKOUT GIT'){
@@ -41,7 +42,7 @@ pipeline{
          steps{  
          script {
                 sh 'aws ecr get-login-password --region us-east-2 | docker login --username AWS --password-stdin 519852036875.dkr.ecr.us-east-2.amazonaws.com'
-                sh 'docker push 519852036875.dkr.ecr.us-east-2.amazonaws.com/cloudjournee:latest'
+                sh 'docker push ${registry}'
                 }
           }
       }
