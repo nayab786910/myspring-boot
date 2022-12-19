@@ -90,23 +90,14 @@ pipeline{
            }
       
         }  
-//         //Deploy docker image in to prod eks 
-//        stage ('K8S Deploy') {
-//        steps { 
-//                 kubernetesDeploy(
-//                     configs: 'springboot.yaml',
-//                     kubeconfigId: 'k8s',
-//                     enableConfigSubstitution: true
-//                     )               
-//              }  
-//          }
+
         //Email notification after build get successful
         stage('Build success email notification ') {
           steps {
             mail to: "digin@cloudjournee.com",
                  cc: "abhilash.rl@cloudjournee.com",
                 subject: "SUCCESSFUL: Build ${env.JOB_NAME} ${env.BUILD_NUMBER}",
-                body: "Build Successful!! Build ${env.JOB_NAME} with ${env.BUILD_NUMBER}\n\n\nBuild Name:  ${env.JOB_NAME}\nBuild Number: ${env.BUILD_NUMBER}\nJenkins URL: ${env.BUILD_URL}\n\nClick below link to proceed to prod environment\n\nhttp://ec2-18-119-103-227.us-east-2.compute.amazonaws.com:8080/job/CJPTECH_LOGIN/buildWithParameters?token=123456&BuildNumber=${env.BUILD_NUMBER}"
+                body: "Build Successful!! Build ${env.JOB_NAME} with ${env.BUILD_NUMBER}\n\n\nBuild Name:  ${env.JOB_NAME}\nBuild Number: ${env.BUILD_NUMBER}\nJenkins URL: ${env.BUILD_URL}\n\nClick below link to proceed to prod environment\n\nhttp://ec2-18-119-103-227.us-east-2.compute.amazonaws.com:8080/job/CJPinternal_PROD/buildWithParameters?token=123456&BuildNumber=${env.BUILD_NUMBER}"
             }
         }     
     }
