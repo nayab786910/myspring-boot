@@ -75,7 +75,7 @@ pipeline{
 //                 }
 //           }
 //       }
-      stage ('K8S dev Deploy') {
+      stage ('K8S PROD DEPLOY') {
           agent { label 'login_page'}
           steps { 
             kubernetesDeploy(
