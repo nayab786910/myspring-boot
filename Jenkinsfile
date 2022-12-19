@@ -29,7 +29,7 @@ pipeline{
                 sh "mvn clean package"
      			  }
         }
-        stage('DOCKER IMAGE') 
+        stage('DOCKER IMAGE FOR DEV') 
        {
           agent { label 'login_page'}
           steps{
@@ -38,7 +38,7 @@ pipeline{
               }
            }
         }
-       stage('Pushing to PROD ECR') {
+       stage('PUSHING TO DEV ECR') {
           agent { label 'login_page'}
           steps{  
           script {
@@ -49,7 +49,7 @@ pipeline{
            }
        }
         //Deploy docker image in to dev eks 
-       stage ('K8S Deploy') {
+       stage (' DEV K8S Deploy') {
        steps { 
                 kubernetesDeploy(
                     configs: 'springboot.yaml',
@@ -71,7 +71,7 @@ pipeline{
 
 //         }
          // Build the docker image to store in to Prod ECR
-        stage('Building docker image for prod')  {
+        stage('DOCKER IMAGE FOR PROD')  {
             agent { label 'login_page'}
          steps{
            script{
@@ -80,7 +80,7 @@ pipeline{
          }
        }
          // Push the docker image in to prod ECR
-       stage('Pushing docker image to Prod-ECR') {
+       stage('PUSHING TO PROD-ECR') {
            agent { label 'login_page'}
         steps{  
          script {
