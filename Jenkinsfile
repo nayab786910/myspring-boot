@@ -58,18 +58,18 @@ pipeline{
                     )               
              }  
          }
-        //Conformation to production after approval
-        stage('Prod Approval confirmation') {
-            agent { label 'login_page'}
-            steps{
-            script {
-                        env.RELEASE_TO_PROD = input message: 'Do you want to create prod build?',
-                            parameters: [choice(name: 'Promote to production', choices: 'No\nYes', description: 'Choose "yes" if you want to deploy this build in production')]
-                        milestone 1
-                    }
-            }
+//         //Conformation to production after approval
+//         stage('Prod Approval confirmation') {
+//             agent { label 'login_page'}
+//             steps{
+//             script {
+//                         env.RELEASE_TO_PROD = input message: 'Do you want to create prod build?',
+//                             parameters: [choice(name: 'Promote to production', choices: 'No\nYes', description: 'Choose "yes" if you want to deploy this build in production')]
+//                         milestone 1
+//                     }
+//             }
 
-        }
+//         }
          // Build the docker image to store in to Prod ECR
         stage('Building docker image for prod')  {
             agent { label 'login_page'}
