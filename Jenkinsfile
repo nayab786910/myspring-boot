@@ -1,5 +1,5 @@
 pipeline{
-    #agent {label 'Any'}
+    // agent {label 'Any'}
     environment { 
                   registry1 = "519852036875.dkr.ecr.us-west-2.amazonaws.com/myrepo:${env.BUILD_NUMBER}"
                 }
