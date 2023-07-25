@@ -17,7 +17,7 @@ on:
 jobs:
   build:
 
-    runs-on: ubuntu-latest
+    runs-on: [self-hosted]
 
     steps:
     - uses: actions/checkout@v3
@@ -29,6 +29,7 @@ jobs:
         cache: maven
     - name: Build with Maven
       run: mvn -B package --file pom.xml
+    - name: moving the jar/war file into staging dir
       run: mkdir staging && cp targets/*jar staging
     - name: Copying the artifact to staging directory
       uses: actions/upload-artifact@v3
